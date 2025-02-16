@@ -3,6 +3,11 @@ package view;
 
 
 
+import lombok.Getter;
+import model.CaselleSpeciali.OggettoGrafico;
+import view.casellaView.swing.CasellaGraficaSwing;
+import view.casellaView.swing.CasellaGraficaSwingModificabile;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -13,16 +18,19 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class SerpenteSwing extends JPanel  {
-    private final CasellaGraficaSwing casellaTesta;
-    private final CasellaGraficaSwing casellaCoda;
+
+public class SerpenteSwing extends JPanel implements OggettoGrafico {
+    @Getter
+    private final CasellaGraficaSwing partenza;
+    @Getter
+    private final CasellaGraficaSwing destinazione;
     private BufferedImage texture;
     private BufferedImage testaImage;
     private BufferedImage codaImage;
 
     public SerpenteSwing(CasellaGraficaSwing partenza, CasellaGraficaSwing destinazione) {
-        this.casellaTesta = partenza;
-        this.casellaCoda = destinazione;
+        this.partenza = partenza;
+        this.destinazione = destinazione;
 
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
@@ -45,14 +53,14 @@ public class SerpenteSwing extends JPanel  {
 
 
     public void aggiungiListenerCaselle() {
-        casellaTesta.addComponentListener(new ComponentAdapter() {
+        partenza.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentMoved(java.awt.event.ComponentEvent e) {
                 aggiornaPosizione();
             }
         });
 
-        casellaCoda.addComponentListener(new ComponentAdapter() {
+        destinazione.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentMoved(java.awt.event.ComponentEvent e) {
                 aggiornaPosizione();
@@ -63,10 +71,10 @@ public class SerpenteSwing extends JPanel  {
 
     public void aggiornaPosizione() {
         // Calcola la posizione e dimensione del pannello per coprire entrambe le caselle
-        int x = Math.min(casellaTesta.getX(), casellaCoda.getX());
-        int y = Math.min(casellaTesta.getY(), casellaCoda.getY());
-        int width = Math.abs(casellaTesta.getX() - casellaCoda.getX()) + casellaTesta.getWidth();
-        int height = Math.abs(casellaTesta.getY() - casellaCoda.getY()) + casellaTesta.getHeight();
+        int x = Math.min(partenza.getX(), destinazione.getX());
+        int y = Math.min(partenza.getY(), destinazione.getY());
+        int width = Math.abs(partenza.getX() - destinazione.getX()) + partenza.getWidth();
+        int height = Math.abs(partenza.getY() - destinazione.getY()) + partenza.getHeight();
 
         setBounds(x, y, width, height);
         repaint(); // Ridisegna il serpente
@@ -79,12 +87,12 @@ public class SerpenteSwing extends JPanel  {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Centro della casella testa
-        int startX = casellaTesta.getX() - getX() + casellaTesta.getWidth() / 2;
-        int startY = casellaTesta.getY() - getY() + casellaTesta.getHeight() / 2;
+        int startX = partenza.getX() - getX() + partenza.getWidth() / 2;
+        int startY = partenza.getY() - getY() + partenza.getHeight() / 2;
 
         // Centro della casella coda
-        int endX = casellaCoda.getX() - getX() + casellaCoda.getWidth() / 2;
-        int endY = casellaCoda.getY() - getY() + casellaCoda.getHeight() / 2;
+        int endX = destinazione.getX() - getX() + destinazione.getWidth() / 2;
+        int endY = destinazione.getY() - getY() + destinazione.getHeight() / 2;
 
         // Calcolo vettore e angolo
         int dx = endX - startX;

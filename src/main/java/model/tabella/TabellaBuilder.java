@@ -6,10 +6,8 @@ import lombok.Setter;
 import model.casella.Casella;
 import model.casella.CasellaFactory;
 import model.casella.CasellaFlyweight;
-import model.casella.CasellaGrafica;
-import view.CasellaGraficaSwing;
+import tools.Posizione;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +57,7 @@ public class TabellaBuilder {
             int i=0;
             for(int r=0; r<righe; r++)
                 for(int c=0; c<colonne; c++){
-                    this.tabella.add(casellaFactory.createCasella(i,new Point2D.Double(r*casellaFlyweight.getLarghezza(),c*casellaFlyweight.getAltezza()),"Normale"));
+                    this.tabella.add(casellaFactory.createCasella(i,new Posizione(r*casellaFlyweight.getLarghezza(),c*casellaFlyweight.getAltezza()),"Normale"));
                     i++;
                 }
             return new TabellaBuilder(this);

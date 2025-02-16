@@ -1,10 +1,11 @@
-package view;
+package view.casellaView.swing;
 
 
 import lombok.Getter;
 import lombok.Setter;
 import model.casella.Casella;
 import model.casella.CasellaGrafica;
+import tools.Posizione;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,15 +16,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+
+
+
 @Getter
 @Setter
-public class CasellaGraficaSwing extends JPanel implements CasellaGrafica {
+public class CasellaGraficaSwingModificabile extends CasellaGraficaSwing  {
 
     private Casella casella;
     private JLabel numeroLabel; // Etichetta per il numero della casella
     private ImageIcon immagine;
 
-    public CasellaGraficaSwing(Casella casella) {
+
+    public CasellaGraficaSwingModificabile(Casella casella) {
         this.casella = casella;
         // Impostazioni di base
         setBounds((int)casella.getPosizione().getX(),(int) casella.getPosizione().getY(),(int) casella.getLarghezza(),(int) casella.getAltezza());
@@ -78,12 +83,6 @@ public class CasellaGraficaSwing extends JPanel implements CasellaGrafica {
     }
 
     @Override
-    public void inizializza(Casella casella) {
-        this.casella = casella;
-
-    }
-
-    @Override
     public void setNumeroLabel(){
         numeroLabel = new JLabel(String.valueOf(casella.getIndice()), SwingConstants.CENTER);
         numeroLabel.setBounds(0, 0, 20, 20); // Occupa tutta la casella
@@ -127,8 +126,9 @@ public class CasellaGraficaSwing extends JPanel implements CasellaGrafica {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                Point nuovoPunto = SwingUtilities.convertPoint(CasellaGraficaSwing.this, e.getPoint(), getParent());
+                Point nuovoPunto = SwingUtilities.convertPoint(CasellaGraficaSwingModificabile.this, e.getPoint(), getParent());
                 setLocation(nuovoPunto.x - offset.x, nuovoPunto.y - offset.y);
+                casella.setPosizione(new Posizione(nuovoPunto.x - offset.x, nuovoPunto.y-offset.y));
             }
         };
 
@@ -146,9 +146,9 @@ public class CasellaGraficaSwing extends JPanel implements CasellaGrafica {
             // Aggiorno coordinate della casella
             int nuovaX = Integer.parseInt(nuovoX);
             int nuovaY = Integer.parseInt(nuovoY);
-            casella.getPosizione().setLocation(nuovaX,nuovaY);
             // Aggiorno posizione grafica del componente
             setLocation(nuovaX, nuovaY);
+            casella.setPosizione(new Posizione(nuovaX,nuovaY));
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Inserire valori numerici validi.");
         }

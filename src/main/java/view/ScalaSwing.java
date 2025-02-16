@@ -2,6 +2,11 @@ package view;
 
 
 
+import lombok.Getter;
+import model.CaselleSpeciali.OggettoGrafico;
+import view.casellaView.swing.CasellaGraficaSwing;
+import view.casellaView.swing.CasellaGraficaSwingModificabile;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,13 +16,15 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-public class Scala extends JPanel {
+@Getter
+public class ScalaSwing extends JPanel implements OggettoGrafico {
+    @Getter
     private final CasellaGraficaSwing partenza;
+    @Getter
     private final CasellaGraficaSwing destinazione;
     private BufferedImage scala;
 
-    public Scala(CasellaGraficaSwing partenza, CasellaGraficaSwing destinazione) {
+    public ScalaSwing(CasellaGraficaSwing partenza, CasellaGraficaSwing destinazione) {
         this.partenza = partenza;
         this.destinazione = destinazione;
 
@@ -29,7 +36,7 @@ public class Scala extends JPanel {
         aggiungiListenerCaselle();
     }
 
-    private void caricaImmagini() {
+    public void caricaImmagini() {
         try {
             scala = ImageIO.read(new File("src/main/img/scala.png"));
 
@@ -37,7 +44,8 @@ public class Scala extends JPanel {
             System.err.println("Errore nel caricamento delle immagini: " + e.getMessage());
         }
     }
-    private void aggiungiListenerCaselle() {
+
+    public void aggiungiListenerCaselle() {
         partenza.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentMoved(java.awt.event.ComponentEvent e) {
@@ -53,7 +61,7 @@ public class Scala extends JPanel {
         });
     }
 
-    private void aggiornaPosizione() {
+    public void aggiornaPosizione() {
         // Calcola la posizione e dimensione del pannello per coprire entrambe le caselle
         int x = Math.min(partenza.getX(), destinazione.getX());
         int y = Math.min(partenza.getY(), destinazione.getY());

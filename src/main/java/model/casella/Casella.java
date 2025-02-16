@@ -2,27 +2,27 @@ package model.casella;
 
 import lombok.Getter;
 import lombok.Setter;
-import view.CasellaGraficaSwing;
+import tools.Posizione;
 
-import java.awt.geom.Point2D;
+import java.io.Serializable;
 
 @Getter
 @Setter
-public class Casella {
+public class Casella implements Serializable {
 
-    private Point2D posizione;
+    private Posizione posizione;
     private int indice;
     private CasellaFlyweight casellaFlyweight;
-    private CasellaGrafica casellaGrafica;
+
     private Casella destinazione=null;
     private CasellaState casellaState;
 
-    public Casella(CasellaFlyweight casellaFlyweight, int indice, Point2D posizione) {
+    public Casella(CasellaFlyweight casellaFlyweight, int indice, Posizione posizione) {
         this.casellaFlyweight=casellaFlyweight;
         this.indice=indice;
         this.posizione=posizione;
         this.casellaState=CasellaState.NORMALE;
-        casellaGrafica=new CasellaGraficaSwing(this);
+
     }
 
     public double getLarghezza(){
@@ -38,6 +38,7 @@ public class Casella {
     public enum CasellaState{
         NORMALE,
         SCALA,
-        SERPENTE
+        SERPENTE,
+        FINALE
     }
 }
